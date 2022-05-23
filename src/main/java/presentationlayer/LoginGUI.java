@@ -26,10 +26,10 @@ public class LoginGUI extends JDialog {
         setResizable(false);
 
         JLabel usernameLabel = new JLabel("Username");
-        JTextField usernameTextField = new JTextField("emp");
+        JTextField usernameTextField = new JTextField("");
         usernameTextField.setColumns(12);
         JLabel passwordLabel = new JLabel("Password");
-        JTextField passwordTextField = new JTextField("emp");
+        JTextField passwordTextField = new JTextField("");
         passwordTextField.setColumns(12);
         JButton registerButton = new JButton("Register");
         JButton loginButton = new JButton("Login");

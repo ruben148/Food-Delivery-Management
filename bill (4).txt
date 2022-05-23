@@ -1,6 +1,8 @@
-Username: ruben   Date: Mon May 23 11:45:08 EEST 2022
+Username: ruben   Date: Mon May 23 13:14:42 EEST 2022
 
+asd    123$
 Spicy Pickled Shallots     78$
 Ethiopian Spice Tea     49$
+Smoked Caviar and Hummus on Pita Toasts     79$
 
-Total price: 127
+Total price: 329

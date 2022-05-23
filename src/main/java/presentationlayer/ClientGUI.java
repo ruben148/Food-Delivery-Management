@@ -1,5 +1,6 @@
 package presentationlayer;
 
+import businesslayer.CompositeProduct;
 import businesslayer.DeliveryService;
 import businesslayer.MenuItem;
 import businesslayer.User;
@@ -168,8 +169,19 @@ public class ClientGUI extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    basket.add(menuItemsScrollPane.getSelected());
-                    basketScrollPane.addItem(menuItemsScrollPane.getSelected());
+                    if ((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+                        basket.add(menuItemsScrollPane.getSelected());
+                        basketScrollPane.addItem(menuItemsScrollPane.getSelected());
+                    }
+                    if ((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+                        if (menuItemsScrollPane.getSelected() instanceof CompositeProduct) {
+                            JDialog jDialog = new JDialog();
+                            jDialog.add(new ProductScrollPane("Composite product", ((CompositeProduct) menuItemsScrollPane.getSelected()).getProducts()));
+                            jDialog.show();
+                            jDialog.pack();
+                            jDialog.setLocationRelativeTo(null);
+                        }
+                    }
                 }
             }
         });

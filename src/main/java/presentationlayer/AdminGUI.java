@@ -9,10 +9,7 @@ import datalayer.Serializer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,14 +90,18 @@ public class AdminGUI extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    compositeProducts.add(menuItemsScrollPane.getSelected());
-                    compositeItemScrollPane.addItem(menuItemsScrollPane.getSelected());
-                }
-                else if (e.getClickCount() == 3) {
-                    if (menuItemsScrollPane.getSelected() instanceof CompositeProduct) {
-                        JDialog jDialog = new JDialog(frame);
-                        jDialog.add(new ProductScrollPane("Composite product", ((CompositeProduct) menuItemsScrollPane.getSelected()).getProducts()));
-                        jDialog.show();
+                    if((e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK) {
+                        compositeProducts.add(menuItemsScrollPane.getSelected());
+                        compositeItemScrollPane.addItem(menuItemsScrollPane.getSelected());
+                    }
+                    if((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) {
+                        if(menuItemsScrollPane.getSelected() instanceof CompositeProduct) {
+                            JDialog jDialog = new JDialog(frame);
+                            jDialog.add(new ProductScrollPane("Composite product", ((CompositeProduct) menuItemsScrollPane.getSelected()).getProducts()));
+                            jDialog.show();
+                            jDialog.pack();
+                            jDialog.setLocationRelativeTo(null);
+                        }
                     }
                 }
             }
@@ -162,6 +163,7 @@ public class AdminGUI extends JFrame{
                         Integer.parseInt(fatTextField.getText()),
                         Integer.parseInt(sodiumTextField.getText()),
                         Integer.parseInt(priceTextField.getText()));
+                System.out.println(titleTextField.getText());
                 int index = menuItemsScrollPane.getSelectedIndex();
                 DeliveryService.getDeliveryService().editItem(index, baseProduct);
                 menuItemsScrollPane.changeList(DeliveryService.getDeliveryService().getMenuItems());

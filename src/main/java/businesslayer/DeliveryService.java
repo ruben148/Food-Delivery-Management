@@ -58,6 +58,11 @@ public final class DeliveryService extends Observable implements DeliveryService
         return menuItems;
     }
 
+    /**
+     * Registers a new order
+     * @param menuItems The list of items in the order
+     * @param user The user who made the order
+     */
     public void newOrder(ArrayList<MenuItem> menuItems, User user) {
         if(menuItems.size()==0)
             throw new UnsupportedOperationException("Cannot create empty order.");
@@ -86,6 +91,11 @@ public final class DeliveryService extends Observable implements DeliveryService
         Serializer.writeEmployeeInfo(User.employees);
     }
 
+    /**
+     * Register an order as done
+     * @param order the order which is done
+     * @param employee the employee who served the order
+     */
     public void orderDone(Order order, Employee employee) {
         if(!employee.active)
             throw new IllegalArgumentException("Employee is not active.");
@@ -103,6 +113,10 @@ public final class DeliveryService extends Observable implements DeliveryService
         Serializer.writeEmployeeInfo(User.employees);
     }
 
+    /**
+     * Generates a .txt bill
+     * @param order the order for which to generate the bill
+     */
     public void generateBill(Order order) {
         if(!orders.containsKey(order))
             throw new UnsupportedOperationException("There is no such order.");
@@ -135,16 +149,27 @@ public final class DeliveryService extends Observable implements DeliveryService
         }
     }
 
+    /**
+     *  Save the status of all Employee instances
+     */
     public void saveEmployeeStatus() {
         Serializer.writeEmployeeInfo(User.employees);
     }
 
+    /**
+     * Get the list of menu items
+     * @return the items in the menu
+     */
     public ArrayList<MenuItem> getMenuItems() {
         menuItems = Serializer.readMenuItems();
         assert !menuItems.isEmpty();
         return menuItems;
     }
 
+    /**
+     *  Add an item to the menu
+     * @param menuItem the MenuItem to add
+     */
     public void addItemToMenu(MenuItem menuItem) {
         if(Objects.equals(menuItem.getTitle(), ""))
             throw new UnsupportedOperationException("Title cannot be null");
@@ -153,21 +178,37 @@ public final class DeliveryService extends Observable implements DeliveryService
         Serializer.writeMenuItems(menuItems);
     }
 
+    /**
+     * Remove an item from the menu
+     * @param menuItem the MenuItem to remove
+     */
     public void removeItemFromMenu(MenuItem menuItem) {
         if(!menuItems.remove(menuItem))
             throw new NoSuchElementException();
         Serializer.writeMenuItems(menuItems);
     }
 
+    /**
+     * Edit one MenuItem
+     * @param index the index of the MenuItem to edit
+     * @param menuItem the new MenuItem
+     */
     public void editItem(int index, MenuItem menuItem) {
         if(index>=menuItems.size())
             throw new NoSuchElementException();
-        if(!menuItem.getTitle().equals(""))
+        if(menuItem.getTitle().equals(""))
             throw new UnsupportedOperationException("Title cannot be null");
         menuItems.set(index, menuItem);
         Serializer.writeMenuItems(menuItems);
     }
 
+    /**
+     *  Get the average numbers of orders, made between 2 hours, regardless the day
+     *  Takes into account every day that the service had orders
+     * @param hour1
+     * @param hour2
+     * @return the average
+     */
     public double getAverageBetween(Date hour1, Date hour2) {
         if(hour1.after(hour2))
             throw new IllegalArgumentException("First date is after second date.");
@@ -204,6 +245,13 @@ public final class DeliveryService extends Observable implements DeliveryService
         return avg;
     }
 
+    /**
+     * Get the average total price of orders, made between 2 hours, regardless the day
+     * Takes into account every day that the service had orders
+     * @param hour1
+     * @param hour2
+     * @return the average
+     */
     public double getAveragePriceBetween(Date hour1, Date hour2) {
         if(hour1.after(hour2))
             throw new IllegalArgumentException("First date is after second date.");
@@ -231,6 +279,14 @@ public final class DeliveryService extends Observable implements DeliveryService
         return avg;
     }
 
+    /**
+     *  Compare hour and minute with another hour and minute
+     * @param h1
+     * @param m1
+     * @param h2
+     * @param m2
+     * @return 1 if first is after that the second, -1 if first is behind the second and 0 if they are the same
+     */
     private int compareTime(int h1, int m1, int h2, int m2) {
         assert h1>=0 & h2>=0 & m1>=0 & m2>=0;
         if (h1 < h2)
@@ -242,6 +298,11 @@ public final class DeliveryService extends Observable implements DeliveryService
         return 1;
     }
 
+    /**
+     * Get the total price of an order
+     * @param order
+     * @return total price
+     */
     public int computeOrderPrice(Order order) {
         int totalPrice = 0;
         for (MenuItem menuItem : orders.get(order))
@@ -250,10 +311,18 @@ public final class DeliveryService extends Observable implements DeliveryService
         return totalPrice;
     }
 
+    /**
+     * Get the average number of orders made in one day
+     * @return the average
+     */
     public double getAveragePerDay() {
         return 1.0 * totalNumberOfOrders / numberOfOrdersPerDay.keySet().size();
     }
 
+    /**
+     * Get the average sum spent in one day
+     * @return
+     */
     public double getAveragePricePerDay() {
         int total = 0;
         for (Order order : orders.keySet())
@@ -263,6 +332,11 @@ public final class DeliveryService extends Observable implements DeliveryService
         return avg;
     }
 
+    /**
+     * Get the MenuItems ordered more that a specified ammount
+     * @param n
+     * @return the list of items
+     */
     public ArrayList<MenuItem> getItemsOrderedMoreThan(int n) {
         if(n<0)
             throw new IllegalArgumentException();
@@ -271,6 +345,12 @@ public final class DeliveryService extends Observable implements DeliveryService
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
+    /**
+     * Get users who ordered more than a specified ammount of times, with a value more than specified
+     * @param minimumOrderQuantity
+     * @param minimumOrderValue
+     * @return A list of users
+     */
     public ArrayList<User> getUsers(int minimumOrderQuantity, int minimumOrderValue) {
         if(minimumOrderQuantity<0 || minimumOrderValue<0)
             throw new IllegalArgumentException();
@@ -295,6 +375,11 @@ public final class DeliveryService extends Observable implements DeliveryService
         return users;*/
     }
 
+    /**
+     * Get the MenuItems ordered at a date
+     * @param date the date
+     * @return
+     */
     public ArrayList<MenuItem> getItemsOrderedAtDate(Date date) {
         ArrayList<MenuItem> menuItems = new ArrayList<>();
         LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -322,23 +407,14 @@ public final class DeliveryService extends Observable implements DeliveryService
         return menuItems;*/
         orders.keySet().stream().forEach(o -> {
             LocalDate localOrderDate = o.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            System.out.println("Comanda:");
-            for (MenuItem menuItem : orders.get(o)){
-                System.out.println(menuItem.getTitle());
-            }
-            System.out.println("");
             if (localDate.isEqual(localOrderDate)) {
-                System.out.println("Am gasit o comanda in acea data:");
                 for (MenuItem menuItem : orders.get(o)) {
-                    System.out.println(menuItem.getTitle());
                     if (!menuItems.contains(menuItem)) {
-
                         menuItems.add(menuItem);
                         menuItem.setTemporaryQuantity(1);
                     } else
                         menuItem.setTemporaryQuantity(menuItem.getTemporaryQuantity() + 1);
                 }
-                System.out.println("");
             }
         });
         return menuItems;

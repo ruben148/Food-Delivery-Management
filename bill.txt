@@ -1,10 +1,7 @@
-Username: ruben   Date: Mon May 23 11:44:57 EEST 2022
+Username: ruben   Date: Mon May 23 13:09:31 EEST 2022
 
-Quick & Spicy Asian Pickles     48$
-Spicy Pickled Shallots     78$
-Ethiopian Spice Tea     49$
-meniuu    123$
-Quick & Spicy Asian Pickles     48$
-Quick & Spicy Asian Pickles     48$
+Beef and Broccoli Wontons with Ginger Dipping Sauce     30$
+Korean Marinated Beef     26$
+Braised Beef and Veal with Tomato Gravy     18$
 
-Total price: 394
+Total price: 74

@@ -30,6 +30,7 @@ public class Employee extends User implements Observer, Serializable {
 
     @Override
     public void update(Observable o, Object arg) {
+        System.out.println("comanda noua");
         Order order = (Order) ((ArrayList<Object>) arg).get(1);
         ArrayList<MenuItem> menuItems = (ArrayList<MenuItem>) ((ArrayList<Object>) arg).get(2);
         boolean add = (boolean)((ArrayList<Object>)arg).get(0);
